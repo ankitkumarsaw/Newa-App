@@ -1,35 +1,48 @@
 import React,{useState, useEffect} from 'react';
+import NewsItem  from './NewsItem'
 import noImage from './img/noImage.jpg'
 export default function Entertainment() {
-  const[newsdata, setNewsData]= useState([])
+  const [newsdata, setNewsData]= useState([])
+  const [loading, setLoading] = useState(true)
+  let page = 1
+  
   useEffect(()=>{
-    news()
+    loadNews()
   },[])
-const news = async ()=>{
-  let url = ' https://newsapi.org/v2/top-headlines?country=in&category=entertainment&apiKey=9ba69ef462424bd384c72c1085d6a13e'
-  let data = await fetch(url)
-  let parseData = await data.json()
-  let pD = parseData.articles;
-  setNewsData(pD)
-}
 
-  return <div className="container" style={{"marginTop":"50px"}}>
-    <div className="row align-items-start">
-    { newsdata.map((e)=>{
-      console.log(e)
-return(
-  <div className="card row" style={{"width": "20rem", "margin" : "5px", "height":"550px"}} key={e.url}>
-  <img src={e.urlToImage?e.urlToImage : noImage} className="card-img-top" alt="..."/>
-  <div className="card-body">
-    <h5 className="card-title">{e.title?e.title :""}</h5>
-    <p className="card-text">{e.description?e.description.slice(0, 88): ""}</p>
-    <a href="#" className="btn btn-primary">Know More</a>
-  </div>
-</div>
-)
+  const loadNews = async () =>{
+    let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=IN&topic=entertainment&lang=en&page_size=20&page=${page}`
+    let data = await fetch(url, {
+      mode: 'cors',
+      headers: {
+        'x-api-key': 'kspC9j74MPqWr9wBLGYteOyInpXQnYFh5F5l7meSQZQ'
+      }
     })
-      
-    }
+    let result = await data.json()
+    setNewsData(result.articles)
+    console.log(result.articles)
+    setLoading(false)
+  }
+
+  const loadMore = async () => {
+    setLoading(true)
+    page++
+    let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=IN&topic=entertainment&lang=en&page_size=20&page=${page}`
+    let data = await fetch(url, {
+      mode: 'cors',
+      headers: {
+        'x-api-key': 'kspC9j74MPqWr9wBLGYteOyInpXQnYFh5F5l7meSQZQ'
+      }
+    })
+    let result = await data.json()
+    setNewsData([...newsdata, ...result.articles])
+    setLoading(false)
+  }
+
+  return <div className="container-fluid" style={{"marginTop":"100px"}}>
+    <div className="row">
+    { newsdata && newsdata.map(news => <NewsItem news={news} key={news._id} />)}
+    { loading ? <button className="btn btn-warning btn-block m-4" disabled>Loading news...</button> : <button className="btn btn-info btn-block m-4" onClick={loadMore}>More</button> }
     </div>
   </div>;
 }

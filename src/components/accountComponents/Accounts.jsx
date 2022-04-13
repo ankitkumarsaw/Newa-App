@@ -9,7 +9,7 @@ export default function Accounts({setUser}) {
   const [error, setError] = useState(null)
 
   
-  const loadAccounts = async () => {
+  const loadAccounts = () => {
     const data = localStorage.getItem('dS')
     const acc = JSON.parse(data)
     acc && setAccounts(acc)
@@ -28,20 +28,23 @@ export default function Accounts({setUser}) {
     if (number && password) {
       if(number.length === 10 && password.length >= 8 && password.length <= 16) {
         const acc = accounts && accounts.find(a => a.number === number)
+         
       if(modalType === 1) {
         if (acc) setError('Account already exists')
         else {
-          setAccounts([...accounts, { number, password }])
+          setAccounts([...accounts, { number, password }]) 
           setUser(number)
         }
       } else {
-        if (acc.password === password) {
-          setUser(number)
-        }
-        else setError('Wrong password')
+        if(!acc) setError("Invalid Credentials")
+        if (acc.password === password ) setUser(acc.number)
+        else {setError('Invalid Credentials')
       }
       }
-    } else {
+      } else {
+        setError('Invalid Credentials')
+      }
+    }else {
       setError('Number and password are required')
     }
   }
@@ -51,6 +54,7 @@ export default function Accounts({setUser}) {
   }, [])
 
   useEffect(() => {
+   
     localStorage.setItem('dS', JSON.stringify(accounts))
     reset()
   }, [accounts])
@@ -81,7 +85,7 @@ export default function Accounts({setUser}) {
 
       <Modal.Footer>
         <h4>{ modalType === 1 ? "Already have an account?" : "Don't have an account?" }</h4>
-        <Button variant="primary" onClick={() => setModalType(modalType === 1 ? 2 : 1)}>{ modalType === 1 ? 'Login' : 'Sign Up' }</Button>
+        <Button variant="primary" onClick={() => setModalType(modalType === 1 ? 2 : 1, setError(false))}>{ modalType === 1 ? 'Login' : 'Sign Up' }</Button>
       </Modal.Footer>
     </Modal>
   )
