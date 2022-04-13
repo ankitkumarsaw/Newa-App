@@ -11,7 +11,7 @@ export default function Business() {
   },[])
 
   const loadNews = async () =>{
-    let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=IN&topic=entertainment&lang=en&page_size=20&page=${page}`
+    let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=IN&topic=business&lang=en&page_size=20&page=${page}`
     let data = await fetch(url, {
       mode: 'cors',
       headers: {
@@ -27,7 +27,7 @@ export default function Business() {
   const loadMore = async () => {
     setLoading(true)
     page++
-    let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=IN&topic=entertainment&lang=en&page_size=20&page=${page}`
+    let url = `https://api.newscatcherapi.com/v2/latest_headlines?countries=IN&topic=business&lang=en&page_size=20&page=${page}`
     let data = await fetch(url, {
       mode: 'cors',
       headers: {

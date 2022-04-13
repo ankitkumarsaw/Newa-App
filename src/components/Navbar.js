@@ -5,7 +5,7 @@ export default function Navbar() {
   return <div>
       <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
   <div className="container-fluid">
-    <Link className="navbar-brand" to="/">Navbar</Link>
+    <Link className="navbar-brand" to="/">NEWS PORTAL</Link>
     <button className="navbar-toggler" type="button" data-bs-herfggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="herfggle navigation">
       <span className="navbar-toggler-icon"></span>
     </button>
